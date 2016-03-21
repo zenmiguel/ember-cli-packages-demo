@@ -1,16 +1,30 @@
-[ ] Add tests to make sure the files are split and small (node tests)
-[ ] Bring packages-resolver (and hard code JS)
+[x] Add tests to make sure the files are split and small (node tests)
+[x] Bring packages-resolver (and hard code JS)
+[ ] Move packages to packages/
 [ ] Lazy load CSS
 [ ] Lazy load JS
   [ ] Add tests for JS lazy loader
 [ ] Add links and link-to across routes. 
-[ ] Remove environment/config from packages since it's already in boot. 
-  Consider overriding all of  `EmberApp.prototype.javascript` or at least `this.concatFiles(appJs` to remove the `app-config.js` footerFile
 
-minor:
-[ ] Makes sure that the `'ember-cli-packages-demo/config/environment'` is only generated for app and not for each addon.   throw new Error('Could not read config from meta tag with name "' + metaName + '".');
+## minor:
+[ ] Decide how to run tests. See engines. 
+[ ] Generate .js tags dynamically for package1 and package2. 
 
+## Reuse
 
-*Later:*
+[ ] Consider splitting for better re-use
+  Move to an addon: 
+    package-name, config/environment changes to get packageNames
+    create a Package that inherits from EmberApp and takes a config override
+    Create an EmberAppWithPackages app that does packages and app and takes overrides for both. 
+    Expose resolver for consuming app
+
+## Later:
 
 [ ] Add support for bundles
+
+### Perf
+
+[ ] Remove environment/config from packages since it's already in boot. 
+  Consider overriding all of  `EmberApp.prototype.javascript` or at least `this.concatFiles(appJs` to remove the `app-config.js` footerFile
+[ ] Test perf
