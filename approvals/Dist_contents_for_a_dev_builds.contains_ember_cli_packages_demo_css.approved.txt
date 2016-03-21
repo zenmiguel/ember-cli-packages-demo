@@ -1,0 +1,4 @@
+.boot {
+  background: red; }
+
+/*# sourceMappingURL=ember-cli-packages-demo.css.map */

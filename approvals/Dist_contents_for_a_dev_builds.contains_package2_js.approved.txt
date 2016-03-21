@@ -1,0 +1,46 @@
+"use strict";
+
+/* jshint ignore:start */
+
+
+
+/* jshint ignore:end */
+
+define('package2/routes/package2', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Route.extend({});
+});
+/* jshint ignore:start */
+
+
+
+/* jshint ignore:end */
+
+/* jshint ignore:start */
+
+define('ember-cli-packages-demo/config/environment', ['ember'], function(Ember) {
+  var prefix = 'ember-cli-packages-demo';
+/* jshint ignore:start */
+
+try {
+  var metaName = prefix + '/config/environment';
+  var rawConfig = Ember['default'].$('meta[name="' + metaName + '"]').attr('content');
+  var config = JSON.parse(unescape(rawConfig));
+
+  return { 'default': config };
+}
+catch(err) {
+  throw new Error('Could not read config from meta tag with name "' + metaName + '".');
+}
+
+/* jshint ignore:end */
+
+});
+
+/* jshint ignore:end */
+
+/* jshint ignore:start */
+
+
+
+/* jshint ignore:end */
+//# sourceMappingURL=package2.map

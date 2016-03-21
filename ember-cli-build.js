@@ -83,7 +83,7 @@ module.exports = function(defaults) {
 
     // Prevent packages from creating their own Ember Application
     package.contentFor = function(config, match, type) {
-      if (type === 'app-boot') {
+      if (type === 'app-boot' || type === 'app-config') {
         return '';
       } else {
         return EmberApp.prototype.contentFor.call(this, config, match, type);
