@@ -1,4 +1,4 @@
 .package2 {
-  background: green; }
+  background: blue; }
 
 /*# sourceMappingURL=package2.css.map */

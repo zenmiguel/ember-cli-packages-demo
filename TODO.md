@@ -1,14 +1,14 @@
 [x] Add tests to make sure the files are split and small (node tests)
 [x] Bring packages-resolver (and hard code JS)
-[ ] Move packages to packages/
-[ ] Lazy load CSS
+[x] Move packages to packages/
 [ ] Lazy load JS
-  [ ] Add tests for JS lazy loader
+  [ ] Split Router.map - Test Engines
+[ ] Lazy load CSS
 [ ] Add links and link-to across routes. 
 
 ## minor:
 [ ] Decide how to run tests. See engines. 
-[ ] Generate .js tags dynamically for package1 and package2. 
+[ ] Generate .js tags dynamically for package1 and package2. It might not be needed after lazy loading of JS 
 
 ## Reuse
 

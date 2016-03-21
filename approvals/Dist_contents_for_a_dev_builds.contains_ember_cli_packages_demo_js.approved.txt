@@ -138,7 +138,10 @@ define('ember-cli-packages-demo/router', ['exports', 'ember', 'ember-cli-package
 
   Router.map(function () {
     //This will catch all the invalid routes.
-    this.resource('catchAll', { path: '*:' });
+    this.route('catchAll', { path: '*:' });
+    this.route('boot');
+    this.route('package1');
+    this.route('package2');
   });
 
   exports['default'] = Router;
@@ -170,9 +173,44 @@ define("ember-cli-packages-demo/templates/application", ["exports"], function (e
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n");
         dom.appendChild(el0, el1);
-        var el1 = dom.createComment("");
+        var el1 = dom.createElement("ul");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment(" TODO: change it to test link-to ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("li");
+        var el3 = dom.createElement("a");
+        dom.setAttribute(el3, "href", "#/boot");
+        var el4 = dom.createTextNode("Boot");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("li");
+        var el3 = dom.createElement("a");
+        dom.setAttribute(el3, "href", "#/package1");
+        var el4 = dom.createTextNode("Package 1");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("li");
+        var el3 = dom.createElement("a");
+        dom.setAttribute(el3, "href", "#/package2");
+        var el4 = dom.createTextNode("Package 2");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createComment("");
         dom.appendChild(el0, el1);
         return el0;
       },
@@ -197,8 +235,50 @@ define("ember-cli-packages-demo/templates/application", ["exports"], function (e
         } else {
           fragment = this.build(dom);
         }
-        var morph0 = dom.createMorphAt(fragment, 2, 2, contextualElement);
+        var morph0 = dom.createMorphAt(fragment, 4, 4, contextualElement);
+        dom.insertBoundary(fragment, null);
         content(env, morph0, context, "outlet");
+        return fragment;
+      }
+    };
+  })());
+});
+define("ember-cli-packages-demo/templates/boot", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      isHTMLBars: true,
+      revision: "Ember@1.11.0",
+      blockParams: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      build: function build(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "boot");
+        var el2 = dom.createTextNode("\n  Boot\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      render: function render(context, env, contextualElement) {
+        var dom = env.dom;
+        dom.detectNamespace(contextualElement);
+        var fragment;
+        if (env.useFragmentCache && dom.canClone) {
+          if (this.cachedFragment === null) {
+            fragment = this.build(dom);
+            if (this.hasRendered) {
+              this.cachedFragment = fragment;
+            } else {
+              this.hasRendered = true;
+            }
+          }
+          if (this.cachedFragment) {
+            fragment = dom.cloneNode(this.cachedFragment, true);
+          }
+        } else {
+          fragment = this.build(dom);
+        }
         return fragment;
       }
     };

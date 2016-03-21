@@ -7,7 +7,10 @@ const Router = Ember.Router.extend({
 
 Router.map(function() {
   //This will catch all the invalid routes.
-  this.resource('catchAll', {path: '*:'});
+  this.route('catchAll', {path: '*:'});
+  this.route('boot');
+  this.route('package1');
+  this.route('package2');
 });
 
 export default Router;
