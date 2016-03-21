@@ -10,7 +10,7 @@
   "scripts": {
     "build": "ember build",
     "start": "ember server",
-    "test": "ember test && mocha approvals/test.js"
+    "test": "./node_modules/.bin/jshint app/ approvals/ config/ public/ tests/ && ember test && node_modules/mocha/bin/mocha approvals/test.js"
   },
   "repository": "",
   "engines": {
@@ -39,6 +39,8 @@
     "ember-export-application-global": "^1.0.4",
     "ember-load-initializers": "^0.5.0",
     "ember-resolver": "^2.0.3",
-    "loader.js": "^4.0.0"
+    "jshint": "^2.9.1",
+    "loader.js": "^4.0.0",
+    "mocha": "^2.4.5"
   }
 }

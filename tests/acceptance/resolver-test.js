@@ -1,3 +1,5 @@
+/* global require */
+
 import { test } from 'qunit';
 import moduleForAcceptance from 'ember-cli-packages-demo/tests/helpers/module-for-acceptance';
 

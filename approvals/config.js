@@ -1,3 +1,5 @@
+/*jshint node:true*/
+
 var config = {
   reporters:  [
     "BeyondCompare",

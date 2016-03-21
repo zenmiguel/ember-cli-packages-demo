@@ -1,3 +1,5 @@
+/*jshint node:true*/
+/* global before, describe, it */
 var approvals = require('approvals');
 var config = require('./config');
 var fs = require('fs');
