@@ -1,8 +1,10 @@
 [x] Add tests to make sure the files are split and small (node tests)
 [x] Bring packages-resolver (and hard code JS)
 [x] Move packages to packages/
-[ ] Lazy load JS
-  [ ] Split Router.map - Test Engines
+[x] Lazy load JS
+  [ ] Split Router.map? 
+  [ ] Test Engines to ensure allignment
+  [ ] For a dev build, maybe do everything sync and drop lazy
 [ ] Lazy load CSS
 [ ] Add links and link-to across routes. 
 
@@ -18,6 +20,7 @@
     create a Package that inherits from EmberApp and takes a config override
     Create an EmberAppWithPackages app that does packages and app and takes overrides for both. 
     Expose resolver for consuming app
+    Lazy-loader: route, catch-all route and background loader
 
 ## Later:
 

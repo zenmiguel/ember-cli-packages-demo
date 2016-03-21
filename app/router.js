@@ -9,7 +9,7 @@ Router.map(function() {
   //This will catch all the invalid routes.
   this.route('catchAll', {path: '*:'});
   this.route('boot');
-  this.route('package1');
+  // this.route('package1');
   this.route('package2');
 });
 
