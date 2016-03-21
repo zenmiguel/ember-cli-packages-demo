@@ -9,6 +9,7 @@ var EmberApp = require('ember-cli/lib/broccoli/ember-app'),
 module.exports = function(defaults) {
   var env = process.env.EMBER_ENV,
     commonConfig = {
+      // Instructions: Add your custom shared config for packages and the boot app
       hinting: false,
       fingerprint: {
         // Disabling here since we do it at the end for *all* the assets
@@ -16,18 +17,7 @@ module.exports = function(defaults) {
       }
     },
     bootAppConfig = {
-      trees: {
-        app: mergeTrees([
-          new Funnel('app', {
-            files: ['index.html', 'app.js', 'router.js', 'resolver.js']
-          }),
-          new Funnel('app/boot'),
-        ]),
-        styles: new Funnel('app/boot/styles'),
-        templates: mergeTrees([
-          new Funnel('app/boot/templates')
-        ])
-      }
+      // Instructions: Add your custom config for the boot app here
     },
     bootApp, packagesApplications, bootAppTree, movedPackagesApplicationTrees;
   bootApp = new EmberApp(defaults, commonConfig, bootAppConfig);
@@ -41,6 +31,7 @@ module.exports = function(defaults) {
 
     // packages export their own js file and are intended to distribute the code-base.
     var packageConfig = {
+      // Instructions: Add your custom config for packages here
       name: packageName,
       // TODO: re-enable jshint once it's actually working fine, for now it just slows down the build
       // when running `ember test` it only jshints boot, but not this one. We'll rely on grunt for now
@@ -54,10 +45,10 @@ module.exports = function(defaults) {
         app: mergeTrees([
           // The index.html is required, so we funnel it here.
           new Funnel('app', { files: ['index.html'] }),
-          new Funnel('app/' + packageName)
+          new Funnel('packages/' + packageName)
         ]),
-        styles: new Funnel('app/' + packageName + '/styles'),
-        templates: new Funnel('app/' + packageName + '/templates')
+        styles: new Funnel('packages/' + packageName + '/styles'),
+        templates: new Funnel('packages/' + packageName + '/templates')
       },
       vendorFiles: {
         // Avoids serving the same dependency twice. List extracted from ember-cli/lib/broccoli/ember-app.js#_initVendorFiles
@@ -70,7 +61,7 @@ module.exports = function(defaults) {
         // 'ember-testing.js': null,
         'app-shims.js': null,
         'ember-resolver.js': null,
-        'ember-data': null, // TODO: do this for boot as well if you don't use ember-data
+        'ember-data': null, // do this for boot as well if you don't use ember-data
         'ember-cli-app-version': null,
         'vendor-suffix': null,
         'ember-load-initializers.js': null,

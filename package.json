@@ -10,7 +10,7 @@
   "scripts": {
     "build": "ember build",
     "start": "ember server",
-    "test": "./node_modules/.bin/jshint app/ approvals/ config/ public/ tests/ && ember test && node_modules/mocha/bin/mocha approvals/test.js"
+    "test": "./node_modules/.bin/jshint app/ approvals/ config/ packages/ public/ tests/ && ember test && node_modules/mocha/bin/mocha approvals/test.js"
   },
   "repository": "",
   "engines": {

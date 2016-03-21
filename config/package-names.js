@@ -8,7 +8,7 @@ function getDirectories(srcpath) {
   });
 }
 
-module.exports = getDirectories('app').filter(function(directory) {
+module.exports = getDirectories('packages').filter(function(directory) {
   switch (directory) {
     case 'boot':
     case 'initializers':
