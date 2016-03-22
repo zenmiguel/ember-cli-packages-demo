@@ -6,7 +6,6 @@
   [x] Dynamically determine the package to load for a given route
   [x] Test LOG_TRANSITIONS_INTERNAL
   [ ] Test Engines to ensure allignment
-  [ ] For a dev build, maybe do everything sync and drop lazy
 [ ] Lazy load CSS
 [ ] Add links and link-to across routes.
 

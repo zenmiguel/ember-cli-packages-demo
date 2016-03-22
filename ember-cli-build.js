@@ -6,6 +6,15 @@ var EmberApp = require('ember-cli/lib/broccoli/ember-app'),
   packageNames = require('./config/package-names'),
   AssetRev = require('broccoli-asset-rev');
 
+// TODO: future API for packagin
+// var emberApp = EmberAppWithPackages({
+//   sharedConfig: {},
+//   mainAppConfig: {},
+//   packagesConfig: {}
+// });
+
+// return emberApp.toTree();
+
 module.exports = function(defaults) {
   var env = process.env.EMBER_ENV,
     commonConfig = {
