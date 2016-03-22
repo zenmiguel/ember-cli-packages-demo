@@ -1,6 +1,4 @@
-/* globals require*/
 import Ember from 'ember';
-import routingConfigUtil from 'ember-cli-packages-demo/utils/lazy-routing-configuration';
 
 var retried = false;
 export default Ember.Route.extend({
@@ -13,13 +11,9 @@ export default Ember.Route.extend({
     }
     retried = !retried;
     transition.abort();
-    this.get('lazyLoader').withPackage('package1').then(()=>{
-      const MainRouter = this.get('container').lookup('router:main');
-      const PackageRouter = require('package1/router');
-      if (PackageRouter && PackageRouter.default) {
-        routingConfigUtil.mergeRouters(MainRouter, PackageRouter.default);
-        transition.retry();
-      }
+    this.get('lazyLoader').loadBundleForUrl(transition.intent.url).then(()=>{
+      transition.retry();
+      retried = false;  // reset this so we can transition to another lazy loaded section
     });
   }
 });

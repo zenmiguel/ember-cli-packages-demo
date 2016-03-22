@@ -15,4 +15,5 @@ test('Can resolve routes from the boot app and pakcages', function(assert) {
   andThen(()=>
     assert.ok(this.application.__container__.lookup('route:package1') instanceof
         require('package1/routes/package1').default));
+  visit('/'); // reset this so refreshing the browser starts at the root
 });

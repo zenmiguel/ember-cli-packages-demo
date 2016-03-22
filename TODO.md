@@ -3,6 +3,7 @@
 [x] Move packages to packages/
 [x] Lazy load JS
   [x] Split Router.map? 
+  [ ] Dynamically determine the package to load for a given route
   [ ] Test LOG_TRANSITIONS_INTERNAL
   [ ] Test Engines to ensure allignment
   [ ] For a dev build, maybe do everything sync and drop lazy
@@ -25,6 +26,10 @@
 ## Later:
 
 [ ] Add support for bundles
+  Nested routes
+  More than one route per bundle
+  More than one package per bundle (concat)
+  Bundle dependencies
 
 ### Perf
 

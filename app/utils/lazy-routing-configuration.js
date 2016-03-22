@@ -27,8 +27,8 @@ function getDSL (PackageRouter) {
   return dsl.generate();
 }
 
-export function mergeRouters(MainRouter, PackageRouter) {
-  MainRouter.router.recognizer.map(getDSL(PackageRouter), function(recognizer, routes) {
+export function mergeRouters(targetRouterInstance, PackageRouter) {
+  targetRouterInstance.router.recognizer.map(getDSL(PackageRouter), function(recognizer, routes) {
     for (var i = routes.length - 1, proceed = true; i >= 0 && proceed; --i) {
       var route = routes[i];
       recognizer.add(routes, { as: route.handler });

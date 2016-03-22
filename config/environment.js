@@ -1,5 +1,6 @@
 /* jshint node: true */
 var packageNames = require('./package-names');
+var bundles = require('./bundles');
 
 module.exports = function(environment) {
   var ENV = {
@@ -8,6 +9,7 @@ module.exports = function(environment) {
     baseURL: '/',
     locationType: 'hash',
     packageNames: packageNames,
+    bundles: bundles,
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
