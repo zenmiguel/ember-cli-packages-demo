@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/MiguelMadero/ember-cli-packages-demo.svg?branch=master)](https://travis-ci.org/MiguelMadero/ember-cli-packages-demo)
+
 # ember-cli-packages-demo
 
 This is a demo and reference implementation for a way of building Ember Apps prior by breaking app.[js|css] into smaller packages that can be lazy loaded. For now, the demo only does the different packages, but will be expanded soon to also do lazy loading.
