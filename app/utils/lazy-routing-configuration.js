@@ -17,13 +17,6 @@ function getDSL (PackageRouter) {
   }
 
   generateDSL.call(dsl);
-
-  // TODO: not sure how this works and if it is needed
-  // if (Ember.get(this, 'namespace.LOG_TRANSITIONS_INTERNAL')) {
-  //   router.log = Ember['default'].Logger.debug;
-  // }
-
-  // router.map(dsl.generate());
   return dsl.generate();
 }
 
