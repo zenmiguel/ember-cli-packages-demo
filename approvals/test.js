@@ -15,7 +15,7 @@ before(function () {
 });
 describe('Dist contents for a dev builds', function () {
   before(function() {
-    this.timeout(10000);
+    this.timeout(20000);
     childProcess.execSync('ember build --environment development --output-path .approvals-dist/');
   });
   it('should contain an index file', function () {
