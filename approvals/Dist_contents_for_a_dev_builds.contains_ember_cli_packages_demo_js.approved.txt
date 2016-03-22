@@ -130,24 +130,40 @@ define('ember-cli-packages-demo/resolver', ['exports', 'ember', 'ember-resolver'
     })
   });
 });
-define('ember-cli-packages-demo/router', ['exports', 'ember', 'ember-cli-packages-demo/config/environment'], function (exports, _ember, _emberCliPackagesDemoConfigEnvironment) {
+define('ember-cli-packages-demo/router', ['exports', 'ember'], function (exports, _ember) {
 
-  var Router = _ember['default'].Router.extend({
-    location: _emberCliPackagesDemoConfigEnvironment['default'].locationType
-  });
+  var Router = _ember['default'].Router.extend();
 
   Router.map(function () {
-    //This will catch all the invalid routes.
+    //This will catch all the invalid routes, try to load its package (or bundle) and then loads its route
     this.route('catchAll', { path: '*:' });
     this.route('boot');
-    this.route('package1');
-    this.route('package2');
   });
 
   exports['default'] = Router;
 });
 define('ember-cli-packages-demo/routes/application', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Route.extend({});
+});
+define('ember-cli-packages-demo/routes/catch-all', ['exports', 'ember'], function (exports, _ember) {
+
+  var retried = false;
+  exports['default'] = _ember['default'].Route.extend({
+    lazyLoader: _ember['default'].inject.service(),
+    redirect: function redirect(model, transition) {
+      if (retried) {
+        // Shortcircuit this in case the download fails.
+        retried = !retried;
+        return;
+      }
+      retried = !retried;
+      transition.abort();
+      this.get('lazyLoader').loadBundleForUrl(transition.intent.url).then(function () {
+        transition.retry();
+        retried = false; // reset this so we can transition to another lazy loaded section
+      });
+    }
+  });
 });
 define('ember-cli-packages-demo/services/ajax', ['exports', 'ember-ajax/services/ajax'], function (exports, _emberAjaxServicesAjax) {
   Object.defineProperty(exports, 'default', {
@@ -157,6 +173,66 @@ define('ember-cli-packages-demo/services/ajax', ['exports', 'ember-ajax/services
     }
   });
 });
+define('ember-cli-packages-demo/services/lazy-loader', ['exports', 'ember', 'ember-cli-packages-demo/config/environment', 'ember-cli-packages-demo/utils/lazy-routing-configuration'], function (exports, _ember, _emberCliPackagesDemoConfigEnvironment, _emberCliPackagesDemoUtilsLazyRoutingConfiguration) {
+
+  var loadedBundles = {};
+  _emberCliPackagesDemoConfigEnvironment['default'].bundles.forEach(function (bundle) {
+    return loadedBundles[bundle.name] = false;
+  });
+
+  exports['default'] = _ember['default'].Service.extend({
+    // TODO: consider moving to  really need to inject this or if it's better to get as an import as @nathanhammond suggested
+    // TODO: consider removing the $ dependency
+    // ajax: Ember.inject.service(),
+    isBundleLoaded: function isBundleLoaded(bundleName) {
+      return loadedBundles[bundleName];
+    },
+    getBundleForUrl: function getBundleForUrl(url) {
+      return _emberCliPackagesDemoConfigEnvironment['default'].bundles.find(function (bundle) {
+        return bundle.handledRoutesPatterns.any(function (pattern) {
+          return url.match(pattern);
+        });
+      });
+    },
+    loadBundleForUrl: function loadBundleForUrl(url) {
+      return this.loadBundle(this.getBundleForUrl(url));
+    },
+    loadBundle: function loadBundle(bundle) {
+      var _this = this;
+
+      if (this.isBundleLoaded(bundle.name)) {
+        return _ember['default'].RSVP.resolve();
+      }
+      // TODO: figure out how to thumbprint this
+      // TODO: change to use ember-ajax instead of $.getScript
+      return new _ember['default'].RSVP.Promise(function (resolve, reject) {
+        var get = _ember['default'].$.ajax({
+          dataType: "script",
+          cache: true,
+          url: '/assets/' + bundle.name + '.js'
+        });
+        get.done(function () {
+          loadedBundles[bundle.name] = true;
+          bundle.packages.forEach(function (packageName) {
+            _this._addRoutesForPackage(packageName);
+          });
+          _ember['default'].run(null, resolve);
+        });
+        get.fail(function (jqXHR) {
+          return _ember['default'].run(null, reject, jqXHR);
+        });
+      });
+    },
+    _addRoutesForPackage: function _addRoutesForPackage(packageName) {
+      var MainRouter = this.get('container').lookup('router:main');
+      var PackageRouter = require(packageName + '/router');
+      if (PackageRouter && PackageRouter['default']) {
+        _emberCliPackagesDemoUtilsLazyRoutingConfiguration['default'].mergeRouters(MainRouter, PackageRouter['default']);
+      }
+    }
+  });
+});
+/* globals require*/
 define("ember-cli-packages-demo/templates/application", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
     return {
@@ -283,6 +359,84 @@ define("ember-cli-packages-demo/templates/boot", ["exports"], function (exports)
       }
     };
   })());
+});
+define("ember-cli-packages-demo/templates/catch-all", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      isHTMLBars: true,
+      revision: "Ember@1.11.0",
+      blockParams: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      build: function build(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createTextNode("Loading...");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      render: function render(context, env, contextualElement) {
+        var dom = env.dom;
+        dom.detectNamespace(contextualElement);
+        var fragment;
+        if (env.useFragmentCache && dom.canClone) {
+          if (this.cachedFragment === null) {
+            fragment = this.build(dom);
+            if (this.hasRendered) {
+              this.cachedFragment = fragment;
+            } else {
+              this.hasRendered = true;
+            }
+          }
+          if (this.cachedFragment) {
+            fragment = dom.cloneNode(this.cachedFragment, true);
+          }
+        } else {
+          fragment = this.build(dom);
+        }
+        return fragment;
+      }
+    };
+  })());
+});
+define('ember-cli-packages-demo/utils/lazy-routing-configuration', ['exports', 'ember'], function (exports, _ember) {
+  exports.mergeRouters = mergeRouters;
+
+  function getDSL(PackageRouter) {
+    // Extracted from Ember, might not work in >1.11
+    var dslCallbacks = PackageRouter.dslCallbacks;
+    var dsl = new _ember['default'].RouterDSL(null, {
+      // enableLoadingSubstates: !!moduleBasedResolver
+      enableLoadingSubstates: false
+    });
+
+    function generateDSL() {
+      this.resource('application', { path: "/", overrideNameAssertion: true }, function () {
+        for (var i = 0; i < dslCallbacks.length; i++) {
+          dslCallbacks[i].call(this);
+        }
+      });
+    }
+
+    generateDSL.call(dsl);
+
+    // TODO: not sure how this works and if it is needed
+    // if (Ember.get(this, 'namespace.LOG_TRANSITIONS_INTERNAL')) {
+    //   router.log = Ember['default'].Logger.debug;
+    // }
+
+    // router.map(dsl.generate());
+    return dsl.generate();
+  }
+
+  function mergeRouters(targetRouterInstance, PackageRouter) {
+    targetRouterInstance.router.recognizer.map(getDSL(PackageRouter), function (recognizer, routes) {
+      for (var i = routes.length - 1, proceed = true; i >= 0 && proceed; --i) {
+        var route = routes[i];
+        recognizer.add(routes, { as: route.handler });
+        proceed = route.path === '/' || route.path === '' || route.handler.slice(-6) === '.index';
+      }
+    });
+  }
 });
 /* jshint ignore:start */
 

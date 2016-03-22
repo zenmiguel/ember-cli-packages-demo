@@ -6,6 +6,18 @@
 
 /* jshint ignore:end */
 
+define('package1/router', ['exports', 'ember', 'ember-cli-packages-demo/config/environment'], function (exports, _ember, _emberCliPackagesDemoConfigEnvironment) {
+
+  var Router = _ember['default'].Router.extend({
+    location: _emberCliPackagesDemoConfigEnvironment['default'].locationType
+  });
+
+  Router.map(function () {
+    this.route('package1');
+  });
+
+  exports['default'] = Router;
+});
 define('package1/routes/package1', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Route.extend({});
 });

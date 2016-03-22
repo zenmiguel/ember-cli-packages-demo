@@ -6,6 +6,16 @@
 
 /* jshint ignore:end */
 
+define('package2/router', ['exports', 'ember'], function (exports, _ember) {
+
+  var Router = _ember['default'].Router.extend();
+
+  Router.map(function () {
+    this.route('package2');
+  });
+
+  exports['default'] = Router;
+});
 define('package2/routes/package2', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Route.extend({});
 });
