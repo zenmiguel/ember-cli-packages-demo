@@ -1,12 +1,17 @@
+/* global require */
 import { moduleFor, test } from 'ember-qunit';
 
-moduleFor('service:lazy-loader', 'Unit | Service | lazy loader', {
-  // Specify the other units that are required for this test.
-  // needs: ['service:foo']
-});
+moduleFor('service:lazy-loader', 'Unit | Service | lazy loader');
 
-// Replace this with your real tests.
-test('it exists', function(assert) {
+test('loads external packages and evaluates the loaded code for external packages', function(assert) {
   let service = this.subject();
-  assert.ok(service);
+  assert.notOk(service.isPackageLoaded('package2'));
+  // Normally this would be a separate test, but we don't have an easy way to "unload" code in the browser
+  assert.notOk(
+    require._eak_seen['package2/routes/package2']);
+
+  service.withPackage('package2').then(()=> {
+    assert.ok(service.isPackageLoaded('package2'));
+    assert.ok(require._eak_seen['package2/routes/package2']);
+  });
 });

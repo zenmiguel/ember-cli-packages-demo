@@ -1,16 +1,11 @@
 import Ember from 'ember';
-import config from './config/environment';
 
-const Router = Ember.Router.extend({
-  location: config.locationType
-});
+const Router = Ember.Router.extend();
 
 Router.map(function() {
-  //This will catch all the invalid routes.
+  //This will catch all the invalid routes, try to load its package (or bundle) and then loads its route
   this.route('catchAll', {path: '*:'});
   this.route('boot');
-  // this.route('package1');
-  this.route('package2');
 });
 
 export default Router;

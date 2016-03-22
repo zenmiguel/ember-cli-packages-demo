@@ -2,25 +2,25 @@
 [x] Bring packages-resolver (and hard code JS)
 [x] Move packages to packages/
 [x] Lazy load JS
-  [ ] Split Router.map? 
+  [x] Split Router.map? 
+  [ ] Test LOG_TRANSITIONS_INTERNAL
   [ ] Test Engines to ensure allignment
   [ ] For a dev build, maybe do everything sync and drop lazy
 [ ] Lazy load CSS
 [ ] Add links and link-to across routes. 
 
 ## minor:
-[ ] Decide how to run tests. See engines. 
-[ ] Generate .js tags dynamically for package1 and package2. It might not be needed after lazy loading of JS 
+[ ] Decide how to run packages tests. See engines. 
 
 ## Reuse
 
 [ ] Consider splitting for better re-use
   Move to an addon: 
-    package-name, config/environment changes to get packageNames
-    create a Package that inherits from EmberApp and takes a config override
+    package-name generator and add them to config/environment changes to get packageNames
+    create a Package object that inherits from EmberApp and takes a config override to clean ember-cli-build
     Create an EmberAppWithPackages app that does packages and app and takes overrides for both. 
     Expose resolver for consuming app
-    Lazy-loader: route, catch-all route and background loader
+    Lazy-loader: catch-all route, service:lazy-loader, util:lazy-routing-configuration
 
 ## Later:
 
