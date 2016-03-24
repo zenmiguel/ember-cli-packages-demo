@@ -1,9 +1,6 @@
 import Ember from 'ember';
-import config from 'ember-cli-packages-demo/config/environment';
 
-const Router = Ember.Router.extend({
-  location: config.locationType
-});
+const Router = Ember.Router.extend();
 
 Router.map(function() {
   this.route('package1');
