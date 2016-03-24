@@ -30,6 +30,7 @@ module.exports = function(defaults) {
     },
     bootApp, packagesApplications, bootAppTree, movedPackagesApplicationTrees;
   bootApp = new EmberApp(defaults, commonConfig, bootAppConfig);
+  bootApp.import('bower_components/moment/moment.js', {outputFile: 'vendor-rest.js'});
 
   // bootApp.import('only-import-dependencies-to-boot-NOT-to-packages');
   bootAppTree = bootApp.toTree();

@@ -28,7 +28,10 @@ describe('Dist contents for a dev builds', function () {
     'package1.js',
     'package2.css',
     'ember-cli-packages-demo.js',
-    'ember-cli-packages-demo.css'];
+    'ember-cli-packages-demo.css',
+    'vendor.js',
+    'vendor.css',
+    'assets/vendor-rest.js'];
   assetsToVerify.forEach(function (file) {
     it(`contains ${file}`, function () {
       this.verifyFileContent(`.approvals-dist/assets/${file}`);
