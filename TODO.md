@@ -6,7 +6,7 @@
   [x] Dynamically determine the package to load for a given route
   [x] Test LOG_TRANSITIONS_INTERNAL
   [ ] Test Engines to ensure allignment
-[ ] Lazy load CSS
+[x] Lazy load CSS
 [ ] Add links and link-to across routes.
 
 ## minor:

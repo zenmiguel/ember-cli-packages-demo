@@ -11,8 +11,6 @@
 
     <link rel="stylesheet" href="assets/vendor.css">
     <link rel="stylesheet" href="assets/ember-cli-packages-demo.css">
-    <link rel="stylesheet" href="assets/package1.css">
-    <link rel="stylesheet" href="assets/package2.css">
 
     
   </head>

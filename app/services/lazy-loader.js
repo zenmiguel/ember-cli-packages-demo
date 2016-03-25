@@ -25,22 +25,14 @@ export default Ember.Service.extend({
     if (this.isBundleLoaded(bundle.name)) {
       return Ember.RSVP.resolve();
     }
-    // TODO: figure out how to thumbprint this
-    // TODO: change to use ember-ajax instead of $.getScript
-    return new Ember.RSVP.Promise((resolve, reject)=>{
-      const get = Ember.$.ajax({
-        dataType: "script",
-        cache: true,
-        url: `/assets/${bundle.name}.js`
+    let promises = [this._loadStylesheet(`/assets/${bundle.name}.css`),
+      this._loadScript(`/assets/${bundle.name}.js`)];
+
+    return Ember.RSVP.all(promises).then(()=>{
+      loadedBundles[bundle.name] = true;
+      bundle.packages.forEach(packageName=>{
+        this._addRoutesForPackage(packageName);
       });
-      get.done(()=> {
-        loadedBundles[bundle.name] = true;
-        bundle.packages.forEach(packageName=>{
-          this._addRoutesForPackage(packageName);
-        });
-        Ember.run(null, resolve);
-      });
-      get.fail((jqXHR)=>Ember.run(null, reject, jqXHR));
     });
   },
   _addRoutesForPackage (packageName) {
@@ -49,5 +41,44 @@ export default Ember.Service.extend({
     if (PackageRouter && PackageRouter.default) {
       routingConfigUtil.mergeRouters(MainRouter, PackageRouter.default);
     }
+  },
+
+  // TODO: extract to a util.
+  _loadScript (url) {
+    // TODO: change to use ember-ajax instead of $.getScript
+    return new Ember.RSVP.Promise((resolve, reject)=>{
+      const get = Ember.$.ajax({
+        dataType: 'script',
+        cache: true,
+        url
+      });
+      get.done(()=> Ember.run(null, resolve));
+      get.fail((jqXHR)=>Ember.run(null, reject, jqXHR));
+    });
+  },
+  // TODO: extract to a util.
+  _loadStylesheet (url) {
+    let linkElement = Ember.$(`<link rel="stylesheet" href="${url}" type="text/css"/>`);
+    let promise = new Ember.RSVP.Promise((resolve, reject)=>{
+      linkElement.one('load', ()=> Ember.run(null, resolve));
+      linkElement.one('error', (evt)=> Ember.run(null, reject, evt));
+    });
+    Ember.$('head').append(linkElement);
+    return promise;
+    // Consider dropping the dependency on jquery
+    // // Create the <style> tag
+    // var style = document.createElement("style");
+
+    // // Add a media (and/or media query) here if you'd like!
+    // // style.setAttribute("media", "screen")
+    // // style.setAttribute("media", "only screen and (max-width : 1024px)")
+
+    // // WebKit hack :(
+    // style.appendChild(document.createTextNode(""));
+
+    // // Add the <style> element to the page
+    // document.head.appendChild(style);
+
+    // return style.sheet;
   }
 });

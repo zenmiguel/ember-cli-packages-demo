@@ -203,23 +203,12 @@ define('ember-cli-packages-demo/services/lazy-loader', ['exports', 'ember', 'emb
       if (this.isBundleLoaded(bundle.name)) {
         return _ember['default'].RSVP.resolve();
       }
-      // TODO: figure out how to thumbprint this
-      // TODO: change to use ember-ajax instead of $.getScript
-      return new _ember['default'].RSVP.Promise(function (resolve, reject) {
-        var get = _ember['default'].$.ajax({
-          dataType: "script",
-          cache: true,
-          url: '/assets/' + bundle.name + '.js'
-        });
-        get.done(function () {
-          loadedBundles[bundle.name] = true;
-          bundle.packages.forEach(function (packageName) {
-            _this._addRoutesForPackage(packageName);
-          });
-          _ember['default'].run(null, resolve);
-        });
-        get.fail(function (jqXHR) {
-          return _ember['default'].run(null, reject, jqXHR);
+      var promises = [this._loadStylesheet('/assets/' + bundle.name + '.css'), this._loadScript('/assets/' + bundle.name + '.js')];
+
+      return _ember['default'].RSVP.all(promises).then(function () {
+        loadedBundles[bundle.name] = true;
+        bundle.packages.forEach(function (packageName) {
+          _this._addRoutesForPackage(packageName);
         });
       });
     },
@@ -229,6 +218,53 @@ define('ember-cli-packages-demo/services/lazy-loader', ['exports', 'ember', 'emb
       if (PackageRouter && PackageRouter['default']) {
         _emberCliPackagesDemoUtilsLazyRoutingConfiguration['default'].mergeRouters(MainRouter, PackageRouter['default']);
       }
+    },
+
+    // TODO: extract to a util.
+    _loadScript: function _loadScript(url) {
+      // TODO: change to use ember-ajax instead of $.getScript
+      return new _ember['default'].RSVP.Promise(function (resolve, reject) {
+        var get = _ember['default'].$.ajax({
+          dataType: 'script',
+          cache: true,
+          url: url
+        });
+        get.done(function () {
+          return _ember['default'].run(null, resolve);
+        });
+        get.fail(function (jqXHR) {
+          return _ember['default'].run(null, reject, jqXHR);
+        });
+      });
+    },
+    // TODO: extract to a util.
+    _loadStylesheet: function _loadStylesheet(url) {
+      var linkElement = _ember['default'].$('<link rel="stylesheet" href="' + url + '" type="text/css"/>');
+      var promise = new _ember['default'].RSVP.Promise(function (resolve, reject) {
+        linkElement.one('load', function () {
+          return _ember['default'].run(null, resolve);
+        });
+        linkElement.one('error', function (evt) {
+          return _ember['default'].run(null, reject, evt);
+        });
+      });
+      _ember['default'].$('head').append(linkElement);
+      return promise;
+      // Consider dropping the dependency on jquery
+      // // Create the <style> tag
+      // var style = document.createElement("style");
+
+      // // Add a media (and/or media query) here if you'd like!
+      // // style.setAttribute("media", "screen")
+      // // style.setAttribute("media", "only screen and (max-width : 1024px)")
+
+      // // WebKit hack :(
+      // style.appendChild(document.createTextNode(""));
+
+      // // Add the <style> element to the page
+      // document.head.appendChild(style);
+
+      // return style.sheet;
     }
   });
 });
