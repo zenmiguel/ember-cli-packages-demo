@@ -28,7 +28,7 @@
   Nested routes
   More than one route per bundle
   More than one package per bundle (concat)
-  Bundle dependencies
+  Manage dependencies
 
 ### Perf
 
