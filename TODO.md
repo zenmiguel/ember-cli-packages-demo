@@ -5,7 +5,7 @@
   [x] Split Router.map?
   [x] Dynamically determine the package to load for a given route
   [x] Test LOG_TRANSITIONS_INTERNAL
-  [ ] Test Engines to ensure allignment
+  [x] Test Engines to ensure allignment
 [x] Lazy load CSS
 [ ] Add links and link-to across routes.
 
