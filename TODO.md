@@ -8,7 +8,9 @@
   [ ] Test Engines to ensure allignment
 [ ] Lazy load CSS
 [ ] Add links and link-to across routes.
-
+  It fails if the route isn't defined (Router.map). Solutions:
+    1. We could funnel all the routes from all the packages into boot, that way we can load everything upfront (and even remove the use of DSL). However, this will break the catch-all approach used for lazy-loading.
+    2. We could use our own link-to helper that will just do a transitionTo, but won't be able to render an anchor tag since we can't resolve the URL from the routeName.
 ## minor:
 [ ] Decide how to run packages tests. See engines.
 
