@@ -51,11 +51,7 @@ module.exports = function(defaults) {
         }
       },
       trees: {
-        app: mergeTrees([
-          // The index.html is required, so we funnel it here.
-          new Funnel('app', { files: ['index.html'] }),
-          new Funnel('packages/' + packageName)
-        ]),
+        app: new Funnel('packages/' + packageName),
         styles: new Funnel('packages/' + packageName + '/styles'),
         templates: new Funnel('packages/' + packageName + '/templates')
       },
@@ -88,6 +84,9 @@ module.exports = function(defaults) {
       } else {
         return EmberApp.prototype.contentFor.call(this, config, match, type);
       }
+    };
+    package.index = function () {
+      return new Funnel('packages/' + packageName);
     };
     // Only boot includes addon's code
     package.addonTreesFor = function(type) {

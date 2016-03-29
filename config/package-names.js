@@ -8,14 +8,4 @@ function getDirectories(srcpath) {
   });
 }
 
-module.exports = getDirectories('packages').filter(function(directory) {
-  switch (directory) {
-    case 'boot':
-    case 'initializers':
-    case 'resolvers':
-    case 'mirage':
-      return false;
-    default:
-      return true;
-  }
-});
+module.exports = getDirectories('packages');
